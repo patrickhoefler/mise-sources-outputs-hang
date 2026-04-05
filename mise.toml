@@ -1,0 +1,8 @@
+[tasks.a]
+sources = ["in"]
+outputs = ["out"]
+run = "cp in out"
+
+[tasks.b]
+depends = ["a"]
+run = "echo b"

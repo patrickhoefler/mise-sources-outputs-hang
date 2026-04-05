@@ -1,0 +1,24 @@
+name: repro
+
+on: [push, workflow_dispatch]
+
+jobs:
+  repro:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: jdx/mise-action@v4
+        with:
+          version: "2026.4.4"
+
+      - name: mise doctor
+        run: mise doctor
+
+      - name: Prime (task a executes, creates out)
+        run: mise run b
+
+      - name: Loop — task a skipped, hangs if bug present
+        timeout-minutes: 1
+        run: for i in $(seq 2000); do mise run b || exit 1; done
